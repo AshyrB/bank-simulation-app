@@ -1,2 +1,6 @@
-package com.cydeo.enums;public enum AccountType {
+package com.cydeo.enums;
+
+public enum AccountType {
+
+    CHECKING,SAVING
 }
