@@ -51,7 +51,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
             return transactionRepository.save(transaction);
-        }else{
+        } else {
             throw new UnderConstructionException("App is under consturction, please try again later");
         }
     }
@@ -69,9 +69,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
-    private boolean checkSenderBalance(Account sender, BigDecimal amount){
+    private boolean checkSenderBalance(Account sender, BigDecimal amount) {
         // verify sender has enough balance to send
-        return (sender.getBalance().subtract(amount).compareTo(BigDecimal.ZERO)>=0);
+        return (sender.getBalance().subtract(amount).compareTo(BigDecimal.ZERO) >= 0);
     }
 
     private void checkAccountOwnership(Account sender, Account receiver) {
@@ -79,29 +79,29 @@ public class TransactionServiceImpl implements TransactionService {
             write an if statement that checks if one of the account is saving,
             and user of sender or receiver is not the same, throw AccountOwnershipException
         */
-        if(
-                sender.getAccountType().equals(AccountType.SAVING)||receiver.getAccountType().equals(AccountType.SAVING)
-                && (!sender.getUserId().equals(receiver.getUserId()))){
+        if (
+                sender.getAccountType().equals(AccountType.SAVING) || receiver.getAccountType().equals(AccountType.SAVING)
+                        && (!sender.getUserId().equals(receiver.getUserId()))) {
             throw new AccountOwnershipException("If one of the account is saving, user must be the same for sender and receiver");
         }
 
 
     }
 
-    private void validateAccount(Account sender, Account receiver){
+    private void validateAccount(Account sender, Account receiver) {
         /*
             - if any of the account is null
             - if account ids are the same(same account)
             - if the account exist in the database (repository)
          */
 
-        if(sender==null||receiver==null){
-           throw new BadRequestException("Sender or Receiver cannot be null");
+        if (sender == null || receiver == null) {
+            throw new BadRequestException("Sender or Receiver cannot be null");
 
         }
 
         // if accounts are the same throw BadRequestException with saying accounts needs to be different
-        if(sender.getId().equals(receiver.getId())){
+        if (sender.getId().equals(receiver.getId())) {
             throw new BadRequestException("Accounts needs to be different than receiver account");
         }
 
@@ -119,7 +119,16 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> findAllTransaction() {
-
         return transactionRepository.findAll();
+    }
+
+    @Override
+    public List<Transaction> last10Transactions() {
+        return transactionRepository.findLast10Transactions();
+    }
+
+    @Override
+    public List<Transaction> findTransactionListById(UUID id) {
+        return transactionRepository.findTransactionListByAccountId(id);
     }
 }

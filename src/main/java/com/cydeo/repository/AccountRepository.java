@@ -31,8 +31,5 @@ public class AccountRepository {
                 .filter(account -> account.getId().equals(id))
                .findAny().orElseThrow(()->new RecordNotFoundException("Account does not exist in the database."));
 
-
-
-
     }
 }
